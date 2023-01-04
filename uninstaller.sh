@@ -84,3 +84,4 @@ else
   echo "実行します"
   build-script|
     adb shell
+fi
