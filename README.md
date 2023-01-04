@@ -3,7 +3,7 @@
 
 # 必要なもの
 Bashとcoreutilsとかとadb
-cutとgrepが使えるスマホ
+それとcutとgrepが使えるスマホ
 
 # 使い方
 `bash uninstaller.sh`で使えます
