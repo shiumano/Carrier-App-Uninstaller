@@ -1,5 +1,6 @@
 function build-script() {
   echo "carrier_exp='$carrier_exp'"
+  echo "ignore_exp='$ignore_exp'"
   echo "dry_run=$dry_run"
   cat $script_path
 }
@@ -9,19 +10,20 @@ then
   pm list packages|
     cut -d ':' -f 2|
       grep $carrier_exp|
-        while read package
-        do
-          echo Uninstalling $package ...
-          if [ $dry_run != true ]
-          then
-            pm uninstall --user 0 $package
-          fi
-          echo
-        done
+        grep -v $ignore_exp|
+          while read package
+          do
+            echo Uninstalling $package ...
+            if [ $dry_run != true ]
+            then
+              pm uninstall --user 0 $package
+            fi
+            echo
+          done
   echo 完了
 else
-  #-e 'docomo' -e 'ntt' -e 'auone' -e 'rakuten' -e 'kddi' -e 'softbank'
   carrier_exp=""
+  ignore_exp="-e 🏢☠️ "
   dry_run=false
   script_path=$0
   while [ "$1" != "" ]
@@ -30,8 +32,11 @@ else
       -h| --help)
         echo "Carrier App Uninstaller"
         echo "キャリアアプリを削除します"
-        echo "Usage: $script_path [-c CARRIER] [-d] [-h]"
+        echo "Usage: $script_path [-c CARRIER] [-i APP] [-d] [-h]"
         echo "  -c, --carrier CARRIER  削除したいアプリのキャリアを直接指定します"
+        echo "                         複数指定可"
+        echo "  -i, --ignore APP       削除しないあぷりのIDを指定します"
+        echo "                         ヤバそうな気がしたアプリを指定しといてください"
         echo "                         複数指定可"
         echo "  -d, --dry-run          実際に削除はせずシミュレーションします"
         echo "  -h, --help             このメッセージを表示します"
@@ -39,6 +44,9 @@ else
       -c| --carrier)
         shift
         carrier_exp+="-e $1 ";;
+      -i| --ignore)
+        shift
+        ignore_exp+="-e $1 ";;
       -d| --dry-run)
         dry_run=true;;
       *)
@@ -76,4 +84,3 @@ else
   echo "実行します"
   build-script|
     adb shell
-fi
