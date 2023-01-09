@@ -95,7 +95,7 @@ function parse-args() {
       -h| --help)
         echo "Carrier App Uninstaller"
         echo "キャリアアプリを削除します"
-        echo "Usage: $script_path [-c CARRIER] [-i APP] [-d] [-h]"
+        echo "Usage: `basename $script_path` [-c CARRIER] [-i APP] [-d] [-h]"
         echo "  -c, --carrier CARRIER  削除したいアプリのキャリアを直接指定します"
         echo "                         複数指定可"
         echo "  -i, --ignore APP       削除しないアプリのIDを指定します"
